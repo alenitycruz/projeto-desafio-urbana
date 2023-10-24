@@ -1,0 +1,47 @@
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link"  routerLink="/menu-usuario">Usuários</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link active" aria-current="page" routerLink="/menu-cartao">Cartões</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" routerLink="/">Sair</a>
+  </li>
+</ul>
+<form>
+  <input type="number" placeholder="Numero do Cartão" class="form-control" name="numeroCartao" [(ngModel)]="cartao.numeroCartao">
+  <input type="text" placeholder="Nome do Cartão" class="form-control" name="nomeCartao" [(ngModel)]="cartao.nomeCartao">
+  <input type="text" placeholder="Status: true(ativado) ou false(desativado)?" name="status" class="form-control" [(ngModel)]="cartao.status">
+  <input type="text" placeholder="Tipo: COMUM, ESTUDANTE ou TRABALHADOR?" class="form-control" name="tipo" [(ngModel)]="cartao.tipo">
+
+  <input type="button" value="Cadastrar" *ngIf="btnCadastroCartao" class="btn btn-primary" (click)="cadastroDeCartao()">
+  <input type="button" value="Alterar" *ngIf="!btnCadastroCartao" class="btn btn-warning" (click)="editarCartao()">
+  <input type="button" value="Remover" *ngIf="!btnCadastroCartao" class="btn btn-danger" (click)="removerCartao()">
+  <input type="button" value="Cancelar" *ngIf="!btnCadastroCartao" class="btn btn-secondary" (click)="cancelarCartao()">
+</form>
+
+
+<table class="table" *ngIf="tabelaCartao">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Nome do Cartão</th>
+      <th>Número do Cartão</th>
+      <th>Status</th>
+      <th>Tipo</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let c of cartoes; index as i">
+      <td>{{i+1}}</td>
+      <td>{{c.numeroCartao}}</td>
+      <td>{{c.nomeCartao}}</td>
+      <td>{{c.status}}</td>
+      <td>{{c.tipo}}</td>
+      <td><button class="btn btn-success" (click)="selecionarCartao(i)">Selecionar</button></td>
+    </tr>
+  </tbody>
+</table>

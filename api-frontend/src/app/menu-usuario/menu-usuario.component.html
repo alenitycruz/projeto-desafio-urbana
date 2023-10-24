@@ -1,0 +1,61 @@
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active" aria-current="page" routerLink="/menu-usuario">Usuários</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" routerLink="/menu-cartao">Cartões</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" routerLink="/">Sair</a>
+  </li>
+</ul>
+<form>
+  <input type="text" placeholder="Nome do Usuário" class="form-control" name="nome" [(ngModel)]="usuario.nome">
+  <input type="text" placeholder="Email do Usuário" class="form-control" name="email" [(ngModel)]="usuario.email">
+  <input type="text" placeholder="Senha do Usuário"class="form-control" name="senha" [(ngModel)]="usuario.senha">
+  <ul class="list-group" *ngFor="let c of cartoes">
+    <li class="list-group-item">
+      <input class="form-check-input me-1" type="checkbox" name="listaCartoes" [value]="c" [id]="'cartao_' + c.idCartao" [(ngModel)]="selectedCard">
+      <label class="form-check-label" [for]="'cartao_' + c.idCartao">{{c.tipo}} - {{c.numeroCartao}}</label>
+    </li>
+  </ul>
+
+
+
+
+  <input type="button" value="Cadastrar" *ngIf="btnCadastro" class="btn btn-primary" (click)="cadastroDeUsuario()">
+  <input type="button" value="Alterar" *ngIf="!btnCadastro" class="btn btn-warning" (click)="editarUsuario()">
+  <input type="button" value="Remover" *ngIf="!btnCadastro" class="btn btn-danger" (click)="removerUsuario()">
+  <input type="button" value="Cancelar" *ngIf="!btnCadastro"  class="btn btn-secondary" routerLink="/menu-usuario">
+</form>
+
+
+<table class="table" *ngIf="tabela">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Nome do Usuário</th>
+      <th>Email do Usuário</th>
+      <th>Senha</th>
+      <th>Cartões</th>
+      <th>Selecionar</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let u of usuarios; index as i">
+      <td>{{i+1}}</td>
+      <td>{{u.nome}}</td>
+      <td>{{u.email}}</td>
+      <td>{{u.senha}}</td>
+      <div>
+      <td >
+        <tr *ngFor="let cartao of u.listaCartoes">
+          <td>{{cartao.tipo}}</td>
+        </tr>
+      </td>
+      </div>
+      <td><button class="btn btn-success" (click)="selecionarUsuario(i)">Selecionar</button></td>
+    </tr>
+  </tbody>
+</table>
