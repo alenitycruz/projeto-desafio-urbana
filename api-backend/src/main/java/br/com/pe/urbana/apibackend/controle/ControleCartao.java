@@ -1,6 +1,7 @@
 package br.com.pe.urbana.apibackend.controle;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.pe.urbana.apibackend.modelo.Cartao;
-import br.com.pe.urbana.apibackend.repositorio.RepositorioCartao;
+import br.com.pe.urbana.apibackend.servico.CartaoServico;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -20,28 +21,35 @@ import br.com.pe.urbana.apibackend.repositorio.RepositorioCartao;
 public class ControleCartao {
 
     @Autowired
-    private RepositorioCartao acao;
+    private CartaoServico servico;
 
     @GetMapping
-    public Iterable<Cartao> mostrarCartoes(){
-        return acao.findAll();
+    public ResponseEntity<Iterable<Cartao>> mostrarCartoes(){
+        return ResponseEntity.ok(servico.mostrarCartoesService());
     }
 
     @PostMapping
-    public Cartao cadastrarCartao(@RequestBody Cartao c){
-        return acao.save(c);
+    public ResponseEntity<Cartao> cadastrarCartao(@RequestBody Cartao c){
+        return ResponseEntity.ok(servico.cadastrarCartaoService(c));
 
     }
 
     @PutMapping
-    public Cartao alterarCartao(@RequestBody Cartao c){
-        return acao.save(c);
+    public ResponseEntity<Cartao> alterarCartao(@RequestBody Cartao c){
+        return ResponseEntity.ok(servico.alterarCartaoService(c));
 
     }
 
     @DeleteMapping("/{id_cartao}")
-    public void removerCartao(@PathVariable Long id_cartao){
-        acao.deleteById(id_cartao);
+    public ResponseEntity<Cartao> removerCartao(@PathVariable Long id_cartao){
+        try {
+            servico.removerCartaoService(id_cartao);
+        return ResponseEntity.ok().build();
+            
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+            
     }
     
 }

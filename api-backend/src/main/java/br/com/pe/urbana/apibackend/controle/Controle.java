@@ -1,7 +1,9 @@
 package br.com.pe.urbana.apibackend.controle;
 
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,34 +14,45 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.pe.urbana.apibackend.modelo.Usuario;
-import br.com.pe.urbana.apibackend.repositorio.Repositorio;
+import br.com.pe.urbana.apibackend.servico.Servico;
 
 @RestController
 @CrossOrigin(origins = "*")
 public class Controle {
-
     @Autowired
-    private Repositorio acao;
+    private Servico servico;
  
     @GetMapping
-    public Iterable<Usuario> mostrarUsuarios() {
-        return acao.findAll();
+    public ResponseEntity<Iterable<Usuario>> mostrarUsuarios() {
+        return ResponseEntity.ok(servico.mostrarUsuariosServico());
     }
 
+
     @PostMapping
-    public Usuario cadastrarUsuarioA(@RequestBody Usuario u){
-        return acao.save(u);
+    public ResponseEntity<Usuario> cadastrarUsuario(@RequestBody Usuario u){
+        return ResponseEntity.ok(servico.cadastrarUsuarioServico(u));
 
     }
 
     @PutMapping
-    public Usuario alterarUsuarioA(@RequestBody Usuario u){
-        return acao.save(u);
+    public ResponseEntity<Usuario> alterarUsuario(@RequestBody Usuario u){
+        return ResponseEntity.ok(servico.alterarUsuarioServico(u));
 
     }
 
     @DeleteMapping("/{id}")
-    public void remover(@PathVariable Long id) {
-        acao.deleteById(id);
+    public ResponseEntity<Usuario> remover(@PathVariable Long id) {
+
+        try {
+
+            servico.removerUsuarioServico(id);
+            return ResponseEntity.ok().build();
+            
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+
+        
     }
+    
 }
